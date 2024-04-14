@@ -3,8 +3,12 @@
 const tests = []
 const onlys = []
 const beforeAlls = []
+const beforeEachs = []
 export function beforeAll(callback) {
   beforeAlls.push(callback)
+}
+export function beforeEach(callback) {
+  beforeEachs.push(callback)
 }
 export function test(name, callback) {
   tests.push({name, callback})
@@ -17,14 +21,12 @@ export function expect(actual) {
   return {
     toBe(expected) {
       if (expected === actual) {
-        console.log('ok')
       } else {
         throw new Error(`fail actual:${actual} expected: ${expected}`)
       }
     },
     toEqual(expected) {
       if (JSON.stringify(expected) === JSON.stringify(actual)) {
-        console.log('ok')
       } else {
         throw new Error(`fail actual:${actual} expected: ${expected}`)
       }
@@ -37,6 +39,11 @@ export function run() {
   }
   const suit = onlys.length > 0? onlys : tests
   for(const test of suit) {
-    test.callback()
+    try {
+      test.callback()
+      console.log(`ok: ${test.name}`)
+    } catch (error) {
+      console.log(`fail: ${error}`)
+    }
   }
 }
