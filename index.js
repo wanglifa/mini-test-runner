@@ -4,11 +4,19 @@ const tests = []
 const onlys = []
 const beforeAlls = []
 const beforeEachs = []
+const afterEachs = []
+const afterAlls = []
 export function beforeAll(callback) {
   beforeAlls.push(callback)
 }
 export function beforeEach(callback) {
   beforeEachs.push(callback)
+}
+export function afterEach(callback) {
+  afterEachs.push(callback)
+}
+export function afterAll(callback) {
+  afterAlls.push(callback)
 }
 export function test(name, callback) {
   tests.push({name, callback})
@@ -48,5 +56,11 @@ export function run() {
     } catch (error) {
       console.log(`fail: ${error}`)
     }
+    for(const afterEachCallback of afterEachs) {
+      afterEachCallback()
+    }
+  }
+  for (const afterAllCallback of afterAlls) {
+    afterAllCallback()
   }
 }
