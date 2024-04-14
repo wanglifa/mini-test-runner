@@ -1,6 +1,8 @@
-import {test, run, it, expect} from "./index.js";
-
-test.only("first test case", () => {
+import {test, run, it, expect, beforeAll} from "./index.js";
+beforeAll(() => {
+  console.log('before all')
+})
+test("first test case", () => {
   console.log("first test case")
   expect(2).toBe(2)
 })

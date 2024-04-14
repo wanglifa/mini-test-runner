@@ -2,6 +2,10 @@
 
 const tests = []
 const onlys = []
+const beforeAlls = []
+export function beforeAll(callback) {
+  beforeAlls.push(callback)
+}
 export function test(name, callback) {
   tests.push({name, callback})
 }
@@ -28,6 +32,9 @@ export function expect(actual) {
   }
 }
 export function run() {
+  for (const beforeAllCallback of beforeAlls) {
+    beforeAllCallback()
+  }
   const suit = onlys.length > 0? onlys : tests
   for(const test of suit) {
     test.callback()
