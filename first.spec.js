@@ -1,6 +1,9 @@
-import {test, run, it, expect, beforeAll} from "./index.js";
+import {test, run, it, expect, beforeAll, beforeEach} from "./index.js";
 beforeAll(() => {
   console.log('before all')
+})
+beforeEach(() => {
+  console.log('before each')
 })
 test("first test case", () => {
   console.log("first test case")

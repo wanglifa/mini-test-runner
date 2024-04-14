@@ -39,6 +39,9 @@ export function run() {
   }
   const suit = onlys.length > 0? onlys : tests
   for(const test of suit) {
+    for(const beforeEachCallback of beforeEachs) {
+      beforeEachCallback()
+    }
     try {
       test.callback()
       console.log(`ok: ${test.name}`)
