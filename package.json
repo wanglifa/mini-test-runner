@@ -9,5 +9,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.20.2",
+    "glob": "^9.3.2"
+  }
 }

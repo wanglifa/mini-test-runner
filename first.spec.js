@@ -1,4 +1,4 @@
-import {test, run, it, expect, beforeAll, beforeEach, afterEach, afterAll} from "./index.js";
+import {test, it, expect, beforeAll, beforeEach, afterEach, afterAll} from "./core.js";
 beforeAll(() => {
   console.log('before all')
 })
@@ -20,4 +20,3 @@ it("second test case", () => {
   const obj = {name: 'lifa'}
   expect(obj).toEqual({name: 'lifa'})
 })
-run()

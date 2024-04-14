@@ -1,66 +1,22 @@
-
-
-const tests = []
-const onlys = []
-const beforeAlls = []
-const beforeEachs = []
-const afterEachs = []
-const afterAlls = []
-export function beforeAll(callback) {
-  beforeAlls.push(callback)
+import glob from 'glob'
+import fs from 'fs/promises'
+import { build} from 'esbuild'
+const files = glob.sync("*.spec.js")
+for(const file of files) {
+  const fileContent = await fs.readFile(file, "utf-8")
+  await runModule(fileContent + ";import {run} from './core.js'; run()")
 }
-export function beforeEach(callback) {
-  beforeEachs.push(callback)
-}
-export function afterEach(callback) {
-  afterEachs.push(callback)
-}
-export function afterAll(callback) {
-  afterAlls.push(callback)
-}
-export function test(name, callback) {
-  tests.push({name, callback})
-}
-export const it = test
-test.only = function(name, callback) {
-  onlys.push({name, callback})
-}
-export function expect(actual) {
-  return {
-    toBe(expected) {
-      if (expected === actual) {
-      } else {
-        throw new Error(`fail actual:${actual} expected: ${expected}`)
-      }
+async function runModule(fileContent) {
+  const result = await build({
+    stdin: {
+      contents: fileContent,
+      resolveDir: process.cwd(),
     },
-    toEqual(expected) {
-      if (JSON.stringify(expected) === JSON.stringify(actual)) {
-      } else {
-        throw new Error(`fail actual:${actual} expected: ${expected}`)
-      }
-    }
-  }
-}
-export function run() {
-  for (const beforeAllCallback of beforeAlls) {
-    beforeAllCallback()
-  }
-  const suit = onlys.length > 0? onlys : tests
-  for(const test of suit) {
-    for(const beforeEachCallback of beforeEachs) {
-      beforeEachCallback()
-    }
-    try {
-      test.callback()
-      console.log(`ok: ${test.name}`)
-    } catch (error) {
-      console.log(`fail: ${error}`)
-    }
-    for(const afterEachCallback of afterEachs) {
-      afterEachCallback()
-    }
-  }
-  for (const afterAllCallback of afterAlls) {
-    afterAllCallback()
-  }
+    // 不写入文件
+    write: false,
+    // 将文件都打包到一个文件里
+    bundle: true,
+    target: "esnext"
+  })
+  new Function(result.outputFiles[0].text)()
 }
